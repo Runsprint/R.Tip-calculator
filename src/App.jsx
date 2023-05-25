@@ -14,10 +14,7 @@ function App() {
   const [percent, setPercent] = useState(0);
   const [custom, setCustom] = useState("");
   const [peopleAmount, setpeopleAmount] = useState("");
-  if (peopleAmount != 0 && bill != 0) {
-    const tip = (persent / 100) * custom;
-    console.log(tip);
-  }
+  const [result, setResult] = useState("$0,00");
   return (
     <>
       <h1 className="title">
@@ -52,8 +49,12 @@ function App() {
           {buttonsArray.map((item) => (
             <button
               className="percent"
-              onClick={() => {
+              onClick={(event) => {
                 setPercent(parseInt(item));
+                if (peopleAmount != 0 && bill != 0) {
+                  const tip = (parseInt(item) / 100) * bill;
+                  setResult(tip);
+                }
               }}
             >
               {item}
@@ -94,7 +95,7 @@ function App() {
             </h1>
             <div className="output_div">
               {" "}
-              <h2 className="output1">$0.00</h2>
+              <h2 className="output1">${result}</h2>
             </div>
           </div>
           <div className="tip_div">
