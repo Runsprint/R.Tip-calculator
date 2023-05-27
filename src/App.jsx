@@ -1,31 +1,67 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import iconDollar from "../public/icon-dollar.svg";
 import iconPerson from "../public/icon-person.svg";
 import logo from "../public/logo.svg";
 
 function App() {
-  const [bill, setBill] = useState("");
+  const [bill, setBill] = useState(0);
+  const [active, setActive] = useState("");
+  const buttonsArray = ["5%", "10%", "15%", "25%", "50%"];
+  const [percent, setPercent] = useState();
+  // const [custom, setCustom] = useState();
+  const [peopleAmount, setpeopleAmount] = useState(0);
+  const [result, setResult] = useState(); //tip
+  const [totalSum, setTotalSum] = useState();
+  const [color, setColor] = useState("#00474b");
+  const [allState, setAllState] = useState(0);
+  console.log(result);
+  // useEffect(() => {
+  //   if (percent && peopleAmount !== 0 && bill !== 0) {
+  //     const tip = ((percent / 100) * bill) / peopleAmount;
+  //     setResult(tip.toFixed(2));
+  //   }
+  // }, [percent]);
+
+  useEffect(() => {
+    if (peopleAmount !== 0 && bill !== 0 && allState !== 0) {
+      const tip = ((parseInt(allState) / 100) * bill) / peopleAmount;
+      setResult(tip.toFixed(2));
+
+      const total = result * peopleAmount;
+      console.log(total);
+      const sum = total + Number(bill);
+      const device = sum / peopleAmount;
+      setTotalSum(device.toFixed(2));
+    }
+  }, [peopleAmount, allState, bill]);
+
+  // useEffect(() => {
+  //   if (result) {
+  //     const total = result * peopleAmount;
+  //     const sum = total + Number(bill);
+  //     const device = sum / peopleAmount;
+  //     setTotalSum(device.toFixed(2));
+  //   }
+  // }, [result]);
+
+  //massive result when massive change after into this function and done his fucction.
+  //also into this function when first render
+  //if ampty massive it into just one time and if I didnt wtire anything after every render into this function.
+
   const handleBillChange = (event) => {
     setBill(event.target.value);
   };
 
-  const buttonsArray = ["5%", "10%", "15%", "25%", "50%"];
-  const [percent, setPercent] = useState(0);
-  const [custom, setCustom] = useState("");
-  const [peopleAmount, setpeopleAmount] = useState("");
-  const [result, setResult] = useState("$0.00");
-  const [totalSum, setTotalSum] = useState("$0.00");
+  const handleResetClick = () => {
+    setBill("");
+    setPercent("");
+    setAllState("");
+    setpeopleAmount("");
+    setResult("");
+    setTotalSum("");
+  };
 
-  // const handleResetClick = () => {
-  //   debugger;
-  //   setBill(0);
-  //   setpeopleAmount(null);
-  //   setPercent(0);
-  //   setResult("$0.00");
-  //   setTotalSum("$0.00");
-  //   console.log("Something");
-  // };
   return (
     <>
       <h1 className="title">
@@ -60,20 +96,12 @@ function App() {
           <div className="buttons">
             {buttonsArray.map((item) => (
               <button
+                style={allState === item ? { background: "red" } : null}
                 className="percent"
+                key={item}
                 onClick={(event) => {
-                  setPercent(parseInt(item));
-                  if (peopleAmount != 0 && bill != 0) {
-                    const tip = ((parseInt(item) / 100) * bill) / peopleAmount;
-                    setResult(tip.toFixed(2));
-                    // const total = bill + tip * peopleAmount;
-                    // setTotalSum(total.toFixed(2));
-                  }
+                  setAllState(item);
                 }}
-                // style={{
-                //   backgroundColor: clickedButton === item ? "black" : "initial",
-                //   color: clickedButton === item ? "white" : "initial",
-                // }}
               >
                 {item}
               </button>
@@ -82,16 +110,11 @@ function App() {
               type="number"
               min="1"
               max="100"
+              value={percent}
               className="custom"
               placeholder="Custom"
               onChange={(event) => {
-                setPercent(event.target.value);
-                if (peopleAmount != 0 && bill != 0) {
-                  const tip = ((custom / 100) * bill) / peopleAmount;
-                  setResult(tip.toFixed(2));
-                  // const total = bill + tip * peopleAmount;
-                  // setTotalSum(total.toFixed(2));
-                }
+                setAllState(Number(event.target.value));
               }}
             />
           </div>
@@ -106,6 +129,7 @@ function App() {
               type="number"
               placeholder="0"
               min="0"
+              value={peopleAmount}
               onChange={(event) => {
                 setpeopleAmount(event.target.value);
               }}
@@ -120,7 +144,9 @@ function App() {
             </h1>
             <div className="output_div">
               {" "}
-              <h2 className="output1">$ {result}</h2>
+              <h2 className="output1">
+                $ {result !== undefined ? result : "0.00"}
+              </h2>
             </div>
           </div>
           <div className="tip_div">
@@ -129,12 +155,14 @@ function App() {
             </h1>
             <div className="output_div">
               {" "}
-              <h2 className="output2">${totalSum}</h2>
+              <h2 className="output2">
+                $ {totalSum !== undefined ? totalSum : "0.00"}
+              </h2>
             </div>
           </div>
-          {/* <button className="reset" onClick={handleResetClick}>
+          <button className="reset" onClick={handleResetClick}>
             RESET
-          </button> */}
+          </button>
         </div>
       </main>
     </>

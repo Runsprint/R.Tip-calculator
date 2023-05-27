@@ -99,6 +99,16 @@ main {
   color: white;
   font-size: 20px;
 }
+/* .percent_active {
+  background-color: black;
+  width: 146px;
+  height: 48px;
+  border: none;
+  border-radius: 5px;
+
+  color: white;
+  font-size: 20px;
+} */
 .five,
 .ten {
   display: flex;
@@ -188,6 +198,7 @@ main {
   background-color: #9fe8df;
   cursor: pointer;
 }
+
 .custom:hover {
   border-color: #9fe8df;
   cursor: pointer;
