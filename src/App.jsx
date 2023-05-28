@@ -5,54 +5,59 @@ import iconPerson from "../public/icon-person.svg";
 import logo from "../public/logo.svg";
 
 function App() {
-  const [bill, setBill] = useState(0);
+  const [bill, setBill] = useState();
   const [active, setActive] = useState("");
-  const buttonsArray = ["5%", "10%", "15%", "25%", "50%"];
+  const buttonsArray = [5, 10, 15, 25, 50];
   const [percent, setPercent] = useState();
-  // const [custom, setCustom] = useState();
-  const [peopleAmount, setpeopleAmount] = useState(0);
+  const [custom, setCustom] = useState();
+  const [peopleAmount, setpeopleAmount] = useState();
   const [result, setResult] = useState(); //tip
   const [totalSum, setTotalSum] = useState();
   const [color, setColor] = useState("#00474b");
-  const [allState, setAllState] = useState(0);
-  console.log(result);
-  // useEffect(() => {
-  //   if (percent && peopleAmount !== 0 && bill !== 0) {
-  //     const tip = ((percent / 100) * bill) / peopleAmount;
-  //     setResult(tip.toFixed(2));
-  //   }
-  // }, [percent]);
+  const [right, setRight] = useState("false");
+  const [allState, setAllState] = useState();
 
   useEffect(() => {
-    if (peopleAmount !== 0 && bill !== 0 && allState !== 0) {
-      const tip = ((parseInt(allState) / 100) * bill) / peopleAmount;
-      setResult(tip.toFixed(2));
+    if (allState) {
+      const tipPercent = (Number(bill) * allState) / 100;
+      const sumTip = tipPercent / peopleAmount;
+      const math = Math.round(sumTip);
+      setResult(math);
 
-      const total = result * peopleAmount;
-      console.log(total);
-      const sum = total + Number(bill);
-      const device = sum / peopleAmount;
-      setTotalSum(device.toFixed(2));
+      const total = Number(bill) + tipPercent;
+      const deviceSum = total / peopleAmount;
+      const mathTotal = Math.round(deviceSum);
+      setTotalSum(mathTotal);
     }
-  }, [peopleAmount, allState, bill]);
+    if (custom) {
+      const tipPercent = (Number(bill) * custom) / 100;
+      const sumTip = tipPercent / peopleAmount;
+      const math = Math.round(sumTip);
+      setResult(math);
 
-  // useEffect(() => {
-  //   if (result) {
-  //     const total = result * peopleAmount;
-  //     const sum = total + Number(bill);
-  //     const device = sum / peopleAmount;
-  //     setTotalSum(device.toFixed(2));
-  //   }
-  // }, [result]);
-
-  //massive result when massive change after into this function and done his fucction.
-  //also into this function when first render
-  //if ampty massive it into just one time and if I didnt wtire anything after every render into this function.
-
+      const total = Number(bill) + tipPercent;
+      const deviceSum = total / peopleAmount;
+      const mathTotal = Math.round(deviceSum);
+      setTotalSum(mathTotal);
+    }
+  }, [allState, custom]);
+  console.log(peopleAmount.value);
+  // if (input.min < 1) {
+  //   setRight(true);
+  // } else {
+  //   setRight(false);
+  // }
   const handleBillChange = (event) => {
     setBill(event.target.value);
   };
 
+  const handleCustomChange = (event) => {
+    setCustom(event.target.value);
+  };
+
+  const handlePeopleAmount = (event) => {
+    setpeopleAmount(event.target.value);
+  };
   const handleResetClick = () => {
     setBill("");
     setPercent("");
@@ -84,6 +89,7 @@ function App() {
                     min={1}
                     placeholder={0}
                     value={bill}
+                    style={false ? { borderColor: "red" } : null}
                     onChange={handleBillChange}
                   />
                 </label>
@@ -96,14 +102,14 @@ function App() {
           <div className="buttons">
             {buttonsArray.map((item) => (
               <button
-                style={allState === item ? { background: "red" } : null}
+                style={allState === item ? { background: "#1e8186" } : null}
                 className="percent"
                 key={item}
                 onClick={(event) => {
                   setAllState(item);
                 }}
               >
-                {item}
+                {item + "%"}
               </button>
             ))}
             <input
@@ -113,9 +119,7 @@ function App() {
               value={percent}
               className="custom"
               placeholder="Custom"
-              onChange={(event) => {
-                setAllState(Number(event.target.value));
-              }}
+              onChange={handleCustomChange}
             />
           </div>
 
@@ -130,9 +134,7 @@ function App() {
               placeholder="0"
               min="0"
               value={peopleAmount}
-              onChange={(event) => {
-                setpeopleAmount(event.target.value);
-              }}
+              onChange={handlePeopleAmount}
             />
             <div className="inputwrapper"> </div>
           </div>
@@ -144,9 +146,7 @@ function App() {
             </h1>
             <div className="output_div">
               {" "}
-              <h2 className="output1">
-                $ {result !== undefined ? result : "0.00"}
-              </h2>
+              <h2 className="output1">$ {result ? result : "0.00"}</h2>
             </div>
           </div>
           <div className="tip_div">
@@ -155,9 +155,7 @@ function App() {
             </h1>
             <div className="output_div">
               {" "}
-              <h2 className="output2">
-                $ {totalSum !== undefined ? totalSum : "0.00"}
-              </h2>
+              <h2 className="output2">$ {totalSum ? totalSum : "0.00"}</h2>
             </div>
           </div>
           <button className="reset" onClick={handleResetClick}>
