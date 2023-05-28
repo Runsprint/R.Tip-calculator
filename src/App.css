@@ -99,16 +99,7 @@ main {
   color: white;
   font-size: 20px;
 }
-/* .percent_active {
-  background-color: black;
-  width: 146px;
-  height: 48px;
-  border: none;
-  border-radius: 5px;
 
-  color: white;
-  font-size: 20px;
-} */
 .five,
 .ten {
   display: flex;
@@ -210,6 +201,10 @@ main {
 .output1,
 .output2 {
   font-size: 28px;
+}
+.error1 {
+  color: red;
+  display: flex;
 }
 @media (min-width: 1440px) {
   .cant {

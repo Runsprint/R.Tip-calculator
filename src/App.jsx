@@ -13,40 +13,35 @@ function App() {
   const [peopleAmount, setpeopleAmount] = useState();
   const [result, setResult] = useState(); //tip
   const [totalSum, setTotalSum] = useState();
+  const [right, setRight] = useState(false);
   const [color, setColor] = useState("#00474b");
-  const [right, setRight] = useState("false");
   const [allState, setAllState] = useState();
 
   useEffect(() => {
     if (allState) {
       const tipPercent = (Number(bill) * allState) / 100;
       const sumTip = tipPercent / peopleAmount;
-      const math = Math.round(sumTip);
+      const math = sumTip.toFixed(2);
       setResult(math);
 
       const total = Number(bill) + tipPercent;
       const deviceSum = total / peopleAmount;
-      const mathTotal = Math.round(deviceSum);
+      const mathTotal = deviceSum.toFixed(2);
       setTotalSum(mathTotal);
     }
     if (custom) {
       const tipPercent = (Number(bill) * custom) / 100;
       const sumTip = tipPercent / peopleAmount;
-      const math = Math.round(sumTip);
+      const math = sumTip.toFixed(2);
       setResult(math);
 
       const total = Number(bill) + tipPercent;
       const deviceSum = total / peopleAmount;
-      const mathTotal = Math.round(deviceSum);
+      const mathTotal = deviceSum.toFixed(2);
       setTotalSum(mathTotal);
     }
   }, [allState, custom]);
-  console.log(peopleAmount.value);
-  // if (input.min < 1) {
-  //   setRight(true);
-  // } else {
-  //   setRight(false);
-  // }
+
   const handleBillChange = (event) => {
     setBill(event.target.value);
   };
@@ -58,6 +53,15 @@ function App() {
   const handlePeopleAmount = (event) => {
     setpeopleAmount(event.target.value);
   };
+
+  const valueEmpty = () => {
+    if (!bill) {
+      setRight(true);
+    } else {
+      setRight(false);
+    }
+  };
+
   const handleResetClick = () => {
     setBill("");
     setPercent("");
@@ -89,9 +93,10 @@ function App() {
                     min={1}
                     placeholder={0}
                     value={bill}
-                    style={false ? { borderColor: "red" } : null}
+                    style={right ? { borderColor: "red" } : null}
                     onChange={handleBillChange}
                   />
+                  {right && <p className="error1">Can't be zero</p>}
                 </label>
               </div>
             </div>
@@ -106,6 +111,7 @@ function App() {
                 className="percent"
                 key={item}
                 onClick={(event) => {
+                  valueEmpty();
                   setAllState(item);
                 }}
               >
@@ -135,7 +141,9 @@ function App() {
               min="0"
               value={peopleAmount}
               onChange={handlePeopleAmount}
+              style={right ? { borderColor: "red" } : null}
             />
+            {right && <p className="error1">Can't be zero</p>}
             <div className="inputwrapper"> </div>
           </div>
         </div>
