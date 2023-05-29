@@ -2,11 +2,9 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import iconDollar from "../public/icon-dollar.svg";
 import iconPerson from "../public/icon-person.svg";
-import logo from "../public/logo.svg";
 
 function App() {
   const [bill, setBill] = useState();
-  const [active, setActive] = useState("");
   const buttonsArray = [5, 10, 15, 25, 50];
   const [percent, setPercent] = useState();
   const [custom, setCustom] = useState();
@@ -14,31 +12,26 @@ function App() {
   const [result, setResult] = useState(); //tip
   const [totalSum, setTotalSum] = useState();
   const [right, setRight] = useState(false);
-  const [color, setColor] = useState("#00474b");
+  const [secondRight, setsecondRight] = useState(false);
   const [allState, setAllState] = useState();
 
+  const calculation = (props) => {
+    const tipPercent = (Number(bill) * props) / 100;
+    const sumTip = tipPercent / peopleAmount;
+    const math = sumTip.toFixed(2);
+    setResult(math);
+
+    const total = Number(bill) + tipPercent;
+    const deviceSum = total / peopleAmount;
+    const mathTotal = deviceSum.toFixed(2);
+    setTotalSum(mathTotal);
+  };
   useEffect(() => {
     if (allState) {
-      const tipPercent = (Number(bill) * allState) / 100;
-      const sumTip = tipPercent / peopleAmount;
-      const math = sumTip.toFixed(2);
-      setResult(math);
-
-      const total = Number(bill) + tipPercent;
-      const deviceSum = total / peopleAmount;
-      const mathTotal = deviceSum.toFixed(2);
-      setTotalSum(mathTotal);
+      calculation(allState);
     }
     if (custom) {
-      const tipPercent = (Number(bill) * custom) / 100;
-      const sumTip = tipPercent / peopleAmount;
-      const math = sumTip.toFixed(2);
-      setResult(math);
-
-      const total = Number(bill) + tipPercent;
-      const deviceSum = total / peopleAmount;
-      const mathTotal = deviceSum.toFixed(2);
-      setTotalSum(mathTotal);
+      calculation(custom);
     }
   }, [allState, custom]);
 
@@ -60,6 +53,11 @@ function App() {
     } else {
       setRight(false);
     }
+    if (!peopleAmount) {
+      setsecondRight(true);
+    } else {
+      setsecondRight(false);
+    }
   };
 
   const handleResetClick = () => {
@@ -69,6 +67,8 @@ function App() {
     setpeopleAmount("");
     setResult("");
     setTotalSum("");
+    setsecondRight(false);
+    setRight(false);
   };
 
   return (
@@ -141,9 +141,9 @@ function App() {
               min="0"
               value={peopleAmount}
               onChange={handlePeopleAmount}
-              style={right ? { borderColor: "red" } : null}
+              style={secondRight ? { borderColor: "red" } : null}
             />
-            {right && <p className="error1">Can't be zero</p>}
+            {secondRight && <p className="error1">Can't be zero</p>}
             <div className="inputwrapper"> </div>
           </div>
         </div>
