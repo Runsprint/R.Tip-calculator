@@ -210,7 +210,7 @@ main {
   .cant {
     left: 280px;
   }
-  .main {
+  main {
     display: flex;
     flex-direction: row;
     width: 1225px;
